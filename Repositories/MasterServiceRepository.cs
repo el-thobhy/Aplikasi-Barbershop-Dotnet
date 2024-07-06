@@ -59,7 +59,16 @@ namespace AplikasiBarbershop.Repositories
                         ModifiedDate = o.ModifiedDate,
                     })
                     .ToListAsync();
-                _result.Data = data;
+                if (data == null)
+                {
+                    _result.Message = "Data tidak Ditemukan";
+                    _result.Success = false;
+                }
+                else
+                {
+                    _result.Data = data;
+                    _result.Message = "Berhasil Get Data";
+                }
             }
             catch (Exception e)
             {
@@ -69,9 +78,57 @@ namespace AplikasiBarbershop.Repositories
             return _result;
         }
 
-        public ResponseResult ReadById(int id)
+        public async Task<ResponseResult> ReadById(int id)
         {
-            throw new NotImplementedException();
+             try
+            {
+                GetServiceViewModel? data = new GetServiceViewModel();
+                data = await _dbContext.MasterServices
+                    .Include(o => o.Customer)
+                    .Where(o => o.Id == id && o.IsDeleted == false)
+                    .Select(o => new GetServiceViewModel 
+                    {
+                        Id = o.Id,
+                        ImageUrl = o.ImageUrl,
+                        CreateBy = o.CreateBy,
+                        CreateDate = o.CreateDate,
+                        Customer = new CustomerViewModel
+                        {
+                            Id = o.Customer.Id,
+                            Address = o.Customer.Address,
+                            Email = o.Customer.Email,
+                            Name = o.Customer.Name,
+                            Phone = o.Customer.Phone,
+                            CreateBy = o.Customer.CreateBy,
+                            CreateDate = o.Customer.CreateDate,
+                        },
+                        Description = o.Description,
+                        Price = o.Price,
+                        ServicesName = o.ServicesName,
+                        CustomerId = o.Customer.Id,
+                        IsDeleted = o.IsDeleted,
+                        DeletedBy = o.DeletedBy,
+                        DeletedDate = o.DeletedDate,
+                        ModifiedBy = o.ModifiedBy,
+                        ModifiedDate = o.ModifiedDate,
+                    }).FirstOrDefaultAsync();
+                if(data == null)
+                {
+                    _result.Message = "Data tidak Ditemukan";
+                    _result.Success = false;
+                }
+                else
+                {
+                    _result.Data = data;
+                    _result.Message = "Berhasil Get Data";
+                }
+            }
+            catch (Exception e)
+            {
+                _result.Success = false;
+                _result.Message = e.Message;
+            }
+            return _result;
         }
 
         public MasterServicesTable Update(MasterServicesTable model)

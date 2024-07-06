@@ -53,7 +53,16 @@ namespace AplikasiBarbershop.Repositories
                         }
                     })
                     .ToList();
-                _result.Data = res;
+                if (res == null)
+                {
+                    _result.Message = "Data tidak Ditemukan";
+                    _result.Success = false;
+                }
+                else
+                {
+                    _result.Data = res;
+                    _result.Message = "Berhasil Get Data";
+                }
             }
             catch (Exception e)
             {
@@ -63,9 +72,51 @@ namespace AplikasiBarbershop.Repositories
             return _result;
         }
 
-        public ResponseResult ReadById(int id)
+        public async Task<ResponseResult> ReadById(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                GetTeamViewModel? data = new GetTeamViewModel();
+                data = await _dbContext.MasterTeams
+                    .Include(o => o.Customer)
+                    .Where(o => o.Id == id && o.IsDeleted == false)
+                    .Select(o => new GetTeamViewModel
+                    {
+                        Id = o.Id,
+                        CustomerId = o.CustomerId,
+                        Email = o.Email,
+                        Name = o.Name,
+                        Phone = o.Phone,
+                        Role = o.Role,
+                        Status = o.Status,
+                        Customer = new CustomerViewModel
+                        {
+                            Id = o.Customer.Id,
+                            Address = o.Customer.Address,
+                            Email = o.Customer.Email,
+                            Name = o.Customer.Name,
+                            Phone = o.Customer.Phone,
+                            CreateBy = o.Customer.CreateBy,
+                            CreateDate = o.Customer.CreateDate,
+                        }
+                    }).FirstOrDefaultAsync();
+                if (data == null)
+                {
+                    _result.Message = "Data tidak Ditemukan";
+                    _result.Success = false;
+                }
+                else
+                {
+                    _result.Data = data;
+                    _result.Message = "Berhasil Get Data";
+                }
+            }
+            catch (Exception e)
+            {
+                _result.Success = false;
+                _result.Message = e.Message;
+            }
+            return _result;
         }
 
         public MasterTeamTable Update(MasterTeamTable model)

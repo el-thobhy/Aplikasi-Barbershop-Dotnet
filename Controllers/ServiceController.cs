@@ -13,6 +13,7 @@ namespace AplikasiBarbershop.Controllers
         private readonly MasterServiceRepository _repo;
         private readonly IMemoryCache _memoryCache;
         private const string ListCacheKey = "listServices";
+        private const string CacheKey = "services";
         private readonly ILogger<CustomerController> _logger;
         public ServiceController(BarberDbContext dbContext, IMemoryCache memoryCache, ILogger<CustomerController> logger)
         {
@@ -37,13 +38,36 @@ namespace AplikasiBarbershop.Controllers
             {
                 _logger.LogInformation("Cache miss for key: {ListCacheKey}", ListCacheKey);
                 res = await _repo.ReadAll();
-                if (res.Success)
+                if (res.Success && res.Data != null)
                 {
                     _memoryCache.Set(ListCacheKey, res, options);
                     _logger.LogInformation("Data cached for key: {ListCacheKey}", ListCacheKey);
                 }
             }
             return res.Success ? Ok(res) : NotFound(res);
+        }
+        [HttpGet("ReadById/{id}")]
+        public async Task<IActionResult> ReadById(int id)
+        {
+            string cacheKey = $"{CacheKey}_{id}";
+            var options = new MemoryCacheEntryOptions()
+                .SetSlidingExpiration(TimeSpan.FromSeconds(30))
+                .SetAbsoluteExpiration(TimeSpan.FromSeconds(30));
+            if (_memoryCache.TryGetValue(cacheKey, out ResponseResult? res))
+            {
+                _logger.LogInformation("Cache hit for key: {CacheKey}", cacheKey);
+            }
+            else
+            {
+                _logger.LogInformation("Cache miss for key: {CacheKey}", cacheKey);
+                res = await _repo.ReadById(id);
+                if (res.Success && res.Data != null)
+                {
+                    _memoryCache.Set(cacheKey, res, options);
+                    _logger.LogInformation("Data cached for key: {CacheKey}", cacheKey);
+                }
+            }
+            return res.Success && res.Data != null ? Ok(res) : NotFound(res);
         }
     }
 }
