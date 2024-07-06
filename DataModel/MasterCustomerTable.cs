@@ -12,8 +12,8 @@ namespace AplikasiBarbershop.DataModel
         public string Email { get; set; } = default!;
         public string Address { get; set; } = default!;
 
-        public virtual MasterTeamTable Team { get; set; } = default!;
-        public virtual ICollection<MasterServicesTable> Services { get; set; } = new List<MasterServicesTable>();
+        public virtual MasterTeamTable? Team { get; set; } = default!;
+        public virtual ICollection<MasterServicesTable>? Services { get; set; } = new List<MasterServicesTable>();
     }
     public class MasterCustomerConfig : IEntityTypeConfiguration<MasterCustomerTable>
     {

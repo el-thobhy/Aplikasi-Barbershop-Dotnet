@@ -14,7 +14,7 @@ namespace AplikasiBarbershop.DataModel
         public int? CustomerId { get; set; } = default!;
         
         [ForeignKey("CustomerId")]
-        public MasterCustomerTable Customer { get; set; } = default!;
+        public MasterCustomerTable? Customer { get; set; } = default!;
     }
 
     public class MasterServicesConfig : IEntityTypeConfiguration<MasterServicesTable>
