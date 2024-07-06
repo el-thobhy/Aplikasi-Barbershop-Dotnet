@@ -14,8 +14,8 @@ namespace AplikasiBarbershop.Controllers
         private readonly IMemoryCache _memoryCache;
         private const string ListCacheKey = "listServices";
         private const string CacheKey = "services";
-        private readonly ILogger<CustomerController> _logger;
-        public ServiceController(BarberDbContext dbContext, IMemoryCache memoryCache, ILogger<CustomerController> logger)
+        private readonly ILogger<ServiceController> _logger;
+        public ServiceController(BarberDbContext dbContext, IMemoryCache memoryCache, ILogger<ServiceController> logger)
         {
             _repo = new MasterServiceRepository(dbContext);
             _memoryCache = memoryCache;

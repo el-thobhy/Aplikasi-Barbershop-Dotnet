@@ -2,7 +2,7 @@
 
 namespace AplikasiBarbershop.ViewModel
 {
-    public class CustomerViewModel: BaseEntities
+    public class BiodataViewModel: BaseEntities
     {
         public int? Id { get; set; } = default!;
         public string? Name { get; set; } = default!;
@@ -12,7 +12,7 @@ namespace AplikasiBarbershop.ViewModel
 
     }
 
-    public class GetCustomerViewModel: CustomerViewModel
+    public class GetBiodataViewModel: BiodataViewModel
     {
         public TeamViewModel? Team { get; set; }
         public List<ServiceViewModel>? Services { get; set; }

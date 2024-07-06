@@ -13,7 +13,7 @@ namespace AplikasiBarbershop.ViewModel
 
     public class GetServiceViewModel: ServiceViewModel
     {
-        public int? CustomerId { get; set; } = default!;
-        public CustomerViewModel? Customer { get; set; } = default!;
+        public int? BiodataId { get; set; } = default!;
+        public BiodataViewModel? Biodata { get; set; } = default!;
     }
 }

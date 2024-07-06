@@ -14,8 +14,8 @@ namespace AplikasiBarbershop.Controllers
         private readonly IMemoryCache _memoryCache;
         private const string ListCacheKey = "listTeam";
         private const string CacheKey = "team";
-        private readonly ILogger<CustomerController> _logger;
-        public TeamController(BarberDbContext dbContext, IMemoryCache memoryCache, ILogger<CustomerController> logger)
+        private readonly ILogger<TeamController> _logger;
+        public TeamController(BarberDbContext dbContext, IMemoryCache memoryCache, ILogger<TeamController> logger)
         {
             _repo = new MasterTeamRepository(dbContext);
             _memoryCache = memoryCache;

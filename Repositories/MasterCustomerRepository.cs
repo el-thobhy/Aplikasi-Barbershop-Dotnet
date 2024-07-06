@@ -5,36 +5,36 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace AplikasiBarbershop.Repositories
 {
-    public class MasterCustomerRepository : InterfaceCrud<MasterCustomerTable>
+    public class MasterBiodataRepository : InterfaceCrud<MasterBiodataTable>
     {
         private readonly BarberDbContext _dbContext;
         private readonly ResponseResult _result = new ResponseResult();
-        public MasterCustomerRepository(BarberDbContext dbContext)
+        public MasterBiodataRepository(BarberDbContext dbContext)
         {
             _dbContext = dbContext;
 
         }
 
-        public MasterCustomerTable Create(MasterCustomerTable model)
+        public MasterBiodataTable Create(MasterBiodataTable model)
         {
             throw new NotImplementedException();
         }
 
-        public MasterCustomerTable Delete(int id)
+        public MasterBiodataTable Delete(int id)
         {
             throw new NotImplementedException();
         }
 
         public async Task<ResponseResult> ReadAll()
         {
-            List<GetCustomerViewModel> data = new List<GetCustomerViewModel>();
+            List<GetBiodataViewModel> data = new List<GetBiodataViewModel>();
             try
             {
-                data = await _dbContext.MasterCustomers
+                data = await _dbContext.MasterBiodatas
                     .Include(o => o.Services)
                     .Include(o => o.Team)
                     .Where(o => o.IsDeleted == false)
-                    .Select(o => new GetCustomerViewModel
+                    .Select(o => new GetBiodataViewModel
                     {
                         Id = o.Id,
                         Name = o.Name,
@@ -89,12 +89,12 @@ namespace AplikasiBarbershop.Repositories
         {
             try
             {
-                GetCustomerViewModel? data = new GetCustomerViewModel();
-                data = await _dbContext.MasterCustomers
+                GetBiodataViewModel? data = new GetBiodataViewModel();
+                data = await _dbContext.MasterBiodatas
                     .Include(o => o.Team)
                     .Include(o => o.Services)
                     .Where(o => o.Id == id && o.IsDeleted == false)
-                    .Select(o => new GetCustomerViewModel 
+                    .Select(o => new GetBiodataViewModel 
                     {
                         Id = o.Id,
                         Name = o.Name,
@@ -145,7 +145,7 @@ namespace AplikasiBarbershop.Repositories
             return _result;
         }
 
-        public MasterCustomerTable Update(MasterCustomerTable model)
+        public MasterBiodataTable Update(MasterBiodataTable model)
         {
             throw new NotImplementedException();
         }

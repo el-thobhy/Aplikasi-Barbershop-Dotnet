@@ -9,17 +9,17 @@ namespace AplikasiBarbershop.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CustomerController : ControllerBase
+    public class BiodataController : ControllerBase
     {
-        private readonly MasterCustomerRepository _repo;
+        private readonly MasterBiodataRepository _repo;
         private readonly IMemoryCache _memoryCache;
-        private const string ListCacheKey = "listCustomer";
+        private const string ListCacheKey = "listBiodata";
         private const string CacheKey = "customer";
-        private readonly ILogger<CustomerController> _logger;
+        private readonly ILogger<BiodataController> _logger;
 
-        public CustomerController(BarberDbContext dbContext, IMemoryCache memoryCache, ILogger<CustomerController> logger)
+        public BiodataController(BarberDbContext dbContext, IMemoryCache memoryCache, ILogger<BiodataController> logger)
         {
-            _repo = new MasterCustomerRepository(dbContext);
+            _repo = new MasterBiodataRepository(dbContext);
             _memoryCache = memoryCache;
             _logger = logger;
 

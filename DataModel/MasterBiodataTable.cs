@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AplikasiBarbershop.DataModel
 {
-    public class MasterCustomerTable: BaseEntities
+    public class MasterBiodataTable: BaseEntities
     {
         public int Id { get; set; } = default!;
         public string Name { get; set; } = default!;
@@ -15,11 +15,11 @@ namespace AplikasiBarbershop.DataModel
         public virtual MasterTeamTable? Team { get; set; } = default!;
         public virtual ICollection<MasterServicesTable>? Services { get; set; } = new List<MasterServicesTable>();
     }
-    public class MasterCustomerConfig : IEntityTypeConfiguration<MasterCustomerTable>
+    public class MasterBiodataConfig : IEntityTypeConfiguration<MasterBiodataTable>
     {
-        public void Configure(EntityTypeBuilder<MasterCustomerTable> builder)
+        public void Configure(EntityTypeBuilder<MasterBiodataTable> builder)
         {
-            builder.ToTable("MasterCustomerTable");
+            builder.ToTable("MasterBiodataTable");
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
@@ -29,22 +29,22 @@ namespace AplikasiBarbershop.DataModel
             builder.Property(x => x.Address).IsRequired().HasMaxLength(255);
 
             builder.HasMany(x => x.Services)
-                .WithOne(x => x.Customer)
-                .HasForeignKey(x => x.CustomerId);
+                .WithOne(x => x.Biodata)
+                .HasForeignKey(x => x.BiodataId);
             builder.HasOne(x => x.Team)
-                .WithOne(x => x.Customer)
-                .HasForeignKey<MasterTeamTable>(x => x.CustomerId);
+                .WithOne(x => x.Biodata)
+                .HasForeignKey<MasterTeamTable>(x => x.BiodataId);
 
             builder.Seed();
         }
     }
 
-    public static class SeedMasterTableCustomer
+    public static class SeedMasterTableBiodata
     {
-        public static void Seed(this EntityTypeBuilder<MasterCustomerTable> builder)
+        public static void Seed(this EntityTypeBuilder<MasterBiodataTable> builder)
         {
             builder.HasData(
-                new MasterCustomerTable
+                new MasterBiodataTable
                 {
                     Id = 1,
                     Name = "Irfan Hakim",
@@ -54,7 +54,7 @@ namespace AplikasiBarbershop.DataModel
                     CreateBy = "admin",
                     CreateDate = DateTime.Now
                 },
-                new MasterCustomerTable
+                new MasterBiodataTable
                 {
                     Id = 2,
                     Name = "Andreas",
@@ -64,7 +64,7 @@ namespace AplikasiBarbershop.DataModel
                     CreateBy = "admin",
                     CreateDate = DateTime.Now
                 },
-                new MasterCustomerTable
+                new MasterBiodataTable
                 {
                     Id = 3,
                     Name = "Paul",
@@ -74,7 +74,7 @@ namespace AplikasiBarbershop.DataModel
                     CreateBy = "admin",
                     CreateDate = DateTime.Now
                 },
-                new MasterCustomerTable
+                new MasterBiodataTable
                 {
                     Id = 4,
                     Name = "Barbara",

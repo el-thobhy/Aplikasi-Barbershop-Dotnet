@@ -11,10 +11,10 @@ namespace AplikasiBarbershop.DataModel
         public string Description { get; set; } = default!;
         public double Price { get; set; } = default!;
         public string ImageUrl { get; set; } = default!;
-        public int? CustomerId { get; set; } = default!;
+        public int? BiodataId { get; set; } = default!;
         
-        [ForeignKey("CustomerId")]
-        public MasterCustomerTable? Customer { get; set; } = default!;
+        [ForeignKey("BiodataId")]
+        public MasterBiodataTable? Biodata { get; set; } = default!;
     }
 
     public class MasterServicesConfig : IEntityTypeConfiguration<MasterServicesTable>
@@ -29,7 +29,7 @@ namespace AplikasiBarbershop.DataModel
             builder.Property(x => x.Description).IsRequired().HasMaxLength(255);
             builder.Property(x => x.Price).IsRequired().HasPrecision(18, 2);
             builder.Property(x => x.ImageUrl).IsRequired().HasMaxLength(255);
-            builder.Property(x => x.CustomerId).IsRequired(false);
+            builder.Property(x => x.BiodataId).IsRequired(false);
 
             builder.Seed();
         }
@@ -45,7 +45,7 @@ namespace AplikasiBarbershop.DataModel
                     ServicesName = "Haircut Mullet style",
                     Description = "Style mullet haircut, short side",
                     Price = 200000,
-                    CustomerId = 2,
+                    BiodataId = 2,
                     ImageUrl = "https://haircutinspiration.com/wp-content/uploads/perm-mullet-with-quiff-750x937.jpg",
                     CreateBy = "admin",
                     CreateDate = DateTime.Now
@@ -87,7 +87,7 @@ namespace AplikasiBarbershop.DataModel
                     ServicesName = "Hair Care",
                     Description = "Cream bath Services, Dandruff care",
                     Price = 400000,
-                    CustomerId = 2,
+                    BiodataId = 2,
                     ImageUrl = "https://cdn2.fabbon.com/uploads/image/file/32093/WhatsApp_Image_2023-08-04_at_17.54.31.jpeg",
                     CreateBy = "admin",
                     CreateDate = DateTime.Now

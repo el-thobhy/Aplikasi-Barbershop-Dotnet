@@ -30,26 +30,26 @@ namespace AplikasiBarbershop.Repositories
             {
                 List<GetTeamViewModel> res = new();
                 res = _dbContext.MasterTeams
-                    .Include(o => o.Customer)
+                    .Include(o => o.Biodata)
                     .Where(o => o.IsDeleted == false)
                     .Select(o => new GetTeamViewModel 
                     { 
                         Id = o.Id,
-                        CustomerId = o.CustomerId,
+                        BiodataId = o.BiodataId,
                         Email = o.Email,
                         Name = o.Name,
                         Phone = o.Phone,
                         Role = o.Role,
                         Status = o.Status,
-                        Customer = new CustomerViewModel
+                        Biodata = new BiodataViewModel
                         {
-                            Id = o.Customer.Id,
-                            Address = o.Customer.Address,
-                            Email = o.Customer.Email,
-                            Name = o.Customer.Name,
-                            Phone = o.Customer.Phone,
-                            CreateBy = o.Customer.CreateBy,
-                            CreateDate = o.Customer.CreateDate,
+                            Id = o.Biodata.Id,
+                            Address = o.Biodata.Address,
+                            Email = o.Biodata.Email,
+                            Name = o.Biodata.Name,
+                            Phone = o.Biodata.Phone,
+                            CreateBy = o.Biodata.CreateBy,
+                            CreateDate = o.Biodata.CreateDate,
                         }
                     })
                     .ToList();
@@ -78,26 +78,26 @@ namespace AplikasiBarbershop.Repositories
             {
                 GetTeamViewModel? data = new GetTeamViewModel();
                 data = await _dbContext.MasterTeams
-                    .Include(o => o.Customer)
+                    .Include(o => o.Biodata)
                     .Where(o => o.Id == id && o.IsDeleted == false)
                     .Select(o => new GetTeamViewModel
                     {
                         Id = o.Id,
-                        CustomerId = o.CustomerId,
+                        BiodataId = o.BiodataId,
                         Email = o.Email,
                         Name = o.Name,
                         Phone = o.Phone,
                         Role = o.Role,
                         Status = o.Status,
-                        Customer = new CustomerViewModel
+                        Biodata = new BiodataViewModel
                         {
-                            Id = o.Customer.Id,
-                            Address = o.Customer.Address,
-                            Email = o.Customer.Email,
-                            Name = o.Customer.Name,
-                            Phone = o.Customer.Phone,
-                            CreateBy = o.Customer.CreateBy,
-                            CreateDate = o.Customer.CreateDate,
+                            Id = o.Biodata.Id,
+                            Address = o.Biodata.Address,
+                            Email = o.Biodata.Email,
+                            Name = o.Biodata.Name,
+                            Phone = o.Biodata.Phone,
+                            CreateBy = o.Biodata.CreateBy,
+                            CreateDate = o.Biodata.CreateDate,
                         }
                     }).FirstOrDefaultAsync();
                 if (data == null)

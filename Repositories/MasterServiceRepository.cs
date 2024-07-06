@@ -30,7 +30,7 @@ namespace AplikasiBarbershop.Repositories
             {
                 List<GetServiceViewModel> data = new List<GetServiceViewModel>();
                 data = await _dbContext.Set<MasterServicesTable>()
-                    .Include(o => o.Customer)
+                    .Include(o => o.Biodata)
                     .Where(o => o.IsDeleted == false)
                     .Select(o => new GetServiceViewModel
                     {
@@ -38,20 +38,20 @@ namespace AplikasiBarbershop.Repositories
                         ImageUrl = o.ImageUrl,
                         CreateBy = o.CreateBy,
                         CreateDate = o.CreateDate,
-                        Customer = new CustomerViewModel
+                        Biodata = new BiodataViewModel
                         {
-                            Id = o.Customer.Id,
-                            Address = o.Customer.Address,
-                            Email = o.Customer.Email,
-                            Name = o.Customer.Name,
-                            Phone = o.Customer.Phone,
-                            CreateBy = o.Customer.CreateBy,
-                            CreateDate = o.Customer.CreateDate,
+                            Id = o.Biodata.Id,
+                            Address = o.Biodata.Address,
+                            Email = o.Biodata.Email,
+                            Name = o.Biodata.Name,
+                            Phone = o.Biodata.Phone,
+                            CreateBy = o.Biodata.CreateBy,
+                            CreateDate = o.Biodata.CreateDate,
                         },
                         Description = o.Description,
                         Price = o.Price,
                         ServicesName = o.ServicesName,
-                        CustomerId = o.Customer.Id,
+                        BiodataId = o.Biodata.Id,
                         IsDeleted = o.IsDeleted,
                         DeletedBy = o.DeletedBy,
                         DeletedDate = o.DeletedDate,
@@ -84,7 +84,7 @@ namespace AplikasiBarbershop.Repositories
             {
                 GetServiceViewModel? data = new GetServiceViewModel();
                 data = await _dbContext.MasterServices
-                    .Include(o => o.Customer)
+                    .Include(o => o.Biodata)
                     .Where(o => o.Id == id && o.IsDeleted == false)
                     .Select(o => new GetServiceViewModel 
                     {
@@ -92,20 +92,20 @@ namespace AplikasiBarbershop.Repositories
                         ImageUrl = o.ImageUrl,
                         CreateBy = o.CreateBy,
                         CreateDate = o.CreateDate,
-                        Customer = new CustomerViewModel
+                        Biodata = new BiodataViewModel
                         {
-                            Id = o.Customer.Id,
-                            Address = o.Customer.Address,
-                            Email = o.Customer.Email,
-                            Name = o.Customer.Name,
-                            Phone = o.Customer.Phone,
-                            CreateBy = o.Customer.CreateBy,
-                            CreateDate = o.Customer.CreateDate,
+                            Id = o.Biodata.Id,
+                            Address = o.Biodata.Address,
+                            Email = o.Biodata.Email,
+                            Name = o.Biodata.Name,
+                            Phone = o.Biodata.Phone,
+                            CreateBy = o.Biodata.CreateBy,
+                            CreateDate = o.Biodata.CreateDate,
                         },
                         Description = o.Description,
                         Price = o.Price,
                         ServicesName = o.ServicesName,
-                        CustomerId = o.Customer.Id,
+                        BiodataId = o.Biodata.Id,
                         IsDeleted = o.IsDeleted,
                         DeletedBy = o.DeletedBy,
                         DeletedDate = o.DeletedDate,
