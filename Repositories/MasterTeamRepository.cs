@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AplikasiBarbershop.Repositories
 {
-    public class MasterTeamRepository : InterfaceCrud<MasterTeamTable>
+    public class MasterTeamRepository : InterfaceCrud<TeamViewModel>
     {
         private readonly BarberDbContext _dbContext;
         private readonly ResponseResult _result = new ResponseResult();
@@ -14,12 +14,40 @@ namespace AplikasiBarbershop.Repositories
             _dbContext = dbContext; 
 
         }
-        public MasterTeamTable Create(MasterTeamTable model)
+        public async Task<ResponseResult> Create(TeamViewModel model)
         {
-            throw new NotImplementedException();
+            try
+            {
+                MasterTeamTable result = new MasterTeamTable()
+                {
+                    Email = model.Email,
+                    Name = model.Name,
+                    Phone = model.Phone,
+                    Role = model.Role ?? Role.HAIR_STYLIST_MEN,
+                    Status = model.Status ?? Status.AVAILABLE,
+                    CreateBy = model.CreateBy,
+                    CreateDate = model.CreateDate
+                };
+                _dbContext.MasterTeams.Add(result);
+                _dbContext.SaveChanges();
+
+                if (result.Id > 0)
+                {
+                    ResponseResult respon = ReadById(result.Id).Result;
+                    _result.Data = respon.Data;
+                    _result.Message = "berhasil create data";
+                }
+            }
+            catch (Exception e)
+            {
+                _result.Success = false;
+                _result.Message = e.Message;
+            }
+
+            return _result;
         }
 
-        public MasterTeamTable Delete(int id)
+        public async Task<ResponseResult> Delete(int id)
         {
             throw new NotImplementedException();
         }
@@ -76,6 +104,13 @@ namespace AplikasiBarbershop.Repositories
                         Phone = o.Phone,
                         Role = o.Role,
                         Status = o.Status,
+                        CreateBy = o.CreateBy,
+                        CreateDate = o.CreateDate,
+                        DeletedBy = o.DeletedBy,
+                        DeletedDate = o.DeletedDate,
+                        IsDeleted = o.IsDeleted,
+                        ModifiedBy = o.ModifiedBy,
+                        ModifiedDate = o.ModifiedDate,
                     }).FirstOrDefaultAsync();
                 if (data == null)
                 {
@@ -96,7 +131,7 @@ namespace AplikasiBarbershop.Repositories
             return _result;
         }
 
-        public MasterTeamTable Update(MasterTeamTable model)
+        public async Task<ResponseResult> Update(TeamViewModel model)
         {
             throw new NotImplementedException();
         }

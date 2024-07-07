@@ -1,5 +1,9 @@
 ﻿using AplikasiBarbershop.DataModel;
 using AplikasiBarbershop.Repositories;
+using AplikasiBarbershop.ViewModel;
+using FluentValidation;
+using FluentValidation.Results;
+using Framework.Auth;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
@@ -15,12 +19,13 @@ namespace AplikasiBarbershop.Controllers
         private const string ListCacheKey = "listServices";
         private const string CacheKey = "services";
         private readonly ILogger<ServiceController> _logger;
-        public ServiceController(BarberDbContext dbContext, IMemoryCache memoryCache, ILogger<ServiceController> logger)
+        private IValidator<ServiceViewModel> _validator;
+        public ServiceController(IValidator<ServiceViewModel> validator, BarberDbContext dbContext, IMemoryCache memoryCache, ILogger<ServiceController> logger)
         {
             _repo = new MasterServiceRepository(dbContext);
             _memoryCache = memoryCache;
             _logger = logger;
-
+            _validator = validator;
         }
 
         [HttpGet("ReadAll")]
@@ -68,6 +73,31 @@ namespace AplikasiBarbershop.Controllers
                 }
             }
             return res.Success && res.Data != null ? Ok(res) : NotFound(res);
+        }
+
+        [HttpPost("Create")]
+        [ReadableBodyStream(Roles = "ADMIN")]
+        public async Task<IActionResult> Create(CreateServiceViewModel model)
+        {
+            ServiceViewModel input = new ServiceViewModel()
+            {
+                ServicesName = model.ServicesName,
+                Description = model.Description,
+                ImageUrl = model.ImageUrl,
+                Price = model.Price ?? 0,
+                CreateBy = ClaimContext.UserName(),
+                CreateDate = DateTime.Now
+            };
+            ValidationResult resultVal = await _validator.ValidateAsync(input);
+            if (!resultVal.IsValid)
+            {
+                return BadRequest(resultVal);
+            }
+            else
+            {
+                var result = await _repo.Create(input);
+                return Ok(result);
+            }
         }
     }
 }

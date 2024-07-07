@@ -5,7 +5,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace AplikasiBarbershop.Repositories
 {
-    public class MasterUserRepository : InterfaceCrud<MasterUserTable>
+    public class MasterUserRepository
     {
         private readonly BarberDbContext _dbContext;
         private readonly ResponseResult _result = new ResponseResult();
@@ -14,17 +14,6 @@ namespace AplikasiBarbershop.Repositories
             _dbContext = dbContext;
 
         }
-
-        public MasterUserTable Create(MasterUserTable model)
-        {
-            throw new NotImplementedException();
-        }
-
-        public MasterUserTable Delete(int id)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<ResponseResult> ReadAll()
         {
             List<GetUserViewModel> data = new List<GetUserViewModel>();
@@ -145,11 +134,6 @@ namespace AplikasiBarbershop.Repositories
                 _result.Message = e.Message;
             }
             return _result;
-        }
-
-        public MasterUserTable Update(MasterUserTable model)
-        {
-            throw new NotImplementedException();
         }
     }
 }

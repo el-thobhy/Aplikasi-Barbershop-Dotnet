@@ -1,5 +1,9 @@
 ﻿using AplikasiBarbershop.DataModel;
 using AplikasiBarbershop.Repositories;
+using AplikasiBarbershop.ViewModel;
+using FluentValidation;
+using FluentValidation.Results;
+using Framework.Auth;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
@@ -15,12 +19,13 @@ namespace AplikasiBarbershop.Controllers
         private const string ListCacheKey = "listTeam";
         private const string CacheKey = "team";
         private readonly ILogger<TeamController> _logger;
-        public TeamController(BarberDbContext dbContext, IMemoryCache memoryCache, ILogger<TeamController> logger)
+        private IValidator<InputTeamViewModel> _validator;
+        public TeamController(IValidator<InputTeamViewModel> validator, BarberDbContext dbContext, IMemoryCache memoryCache, ILogger<TeamController> logger)
         {
             _repo = new MasterTeamRepository(dbContext);
             _memoryCache = memoryCache;
             _logger = logger;
-
+            _validator = validator;
         }
 
         [HttpGet("ReadAll")]
@@ -67,6 +72,32 @@ namespace AplikasiBarbershop.Controllers
                 }
             }
             return res.Success && res.Data != null ? Ok(res) : NotFound(res);
+        }
+        [HttpPost("Create")]
+        [ReadableBodyStream(Roles = "ADMIN")]
+        public async Task<IActionResult> Create(InputTeamViewModel model)
+        {
+            
+            ValidationResult resultVal = await _validator.ValidateAsync(model);
+            if (!resultVal.IsValid)
+            {
+                return BadRequest(resultVal);
+            }
+            else
+            {
+                TeamViewModel input = new()
+                {
+                    Email = model.Email,
+                    Name = model.Name,
+                    Phone = model.Phone,
+                    Role = model.Role,
+                    Status = model.Status,
+                    CreateBy = ClaimContext.UserName(),
+                    CreateDate = DateTime.Now
+                };
+                var result = await _repo.Create(input);
+                return Ok(result);
+            }
         }
     }
 }

@@ -1,10 +1,11 @@
 ﻿using AplikasiBarbershop.DataModel;
 using AplikasiBarbershop.ViewModel;
+using Framework.Auth;
 using Microsoft.EntityFrameworkCore;
 
 namespace AplikasiBarbershop.Repositories
 {
-    public class MasterServiceRepository: InterfaceCrud<MasterServicesTable>
+    public class MasterServiceRepository: InterfaceCrud<ServiceViewModel>
     {
         private readonly BarberDbContext _dbContext;
         private readonly ResponseResult _result = new ResponseResult();
@@ -14,12 +15,40 @@ namespace AplikasiBarbershop.Repositories
             _dbContext.Database.EnsureCreated();
         }
 
-        public MasterServicesTable Create(MasterServicesTable model)
+        public async Task<ResponseResult> Create(ServiceViewModel model)
         {
-            throw new NotImplementedException();
+            try
+            {
+                MasterServicesTable result = new MasterServicesTable()
+                {
+                    ServicesName = model.ServicesName,
+                    Description = model.Description,
+                    ImageUrl = model.ImageUrl,
+                    Price = model.Price ?? 0,
+                    CreateBy = model.CreateBy,
+                    CreateDate = model.CreateDate
+                };
+                _dbContext.MasterServices.Add(result);
+                _dbContext.SaveChanges();
+
+                if ( result.Id > 0)
+                {
+                    ResponseResult respon = ReadById(result.Id).Result;
+                    _result.Data = respon.Data;
+                    _result.Message = "berhasil create data";
+                }
+            }
+            catch (Exception e)
+            {
+                _result.Success = false;
+                _result.Message = e.Message;
+            }
+
+            return _result;
+
         }
 
-        public MasterServicesTable Delete(int id)
+        public async Task<ResponseResult> Delete(int id)
         {
             throw new NotImplementedException();
         }
@@ -109,7 +138,7 @@ namespace AplikasiBarbershop.Repositories
             return _result;
         }
 
-        public MasterServicesTable Update(MasterServicesTable model)
+        public async Task<ResponseResult> Update(ServiceViewModel model)
         {
             throw new NotImplementedException();
         }
