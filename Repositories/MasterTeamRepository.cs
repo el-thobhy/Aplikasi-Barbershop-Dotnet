@@ -1,5 +1,6 @@
 ﻿using AplikasiBarbershop.DataModel;
 using AplikasiBarbershop.ViewModel;
+using Framework.Auth;
 using Microsoft.EntityFrameworkCore;
 
 namespace AplikasiBarbershop.Repositories
@@ -49,7 +50,36 @@ namespace AplikasiBarbershop.Repositories
 
         public async Task<ResponseResult> Delete(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                MasterTeamTable? data = await _dbContext.MasterTeams
+                    .Where(o => o.Id == id)
+                    .FirstOrDefaultAsync();
+                data.IsDeleted = true;
+                data.DeletedBy = ClaimContext.UserName();
+                data.DeletedDate = DateTime.Now;
+
+                _dbContext.MasterTeams.Update(data);
+                _dbContext.SaveChanges();
+
+                
+                if (data.IsDeleted == true)
+                {
+                    _result.Success = true;
+                    _result.Message = $"Data {data.Name} berhasil dihapus";
+                }
+                else
+                {
+                    _result.Success = false;
+                    _result.Message = "data Gagal dihapus";
+                }
+            }
+            catch (Exception e)
+            {
+                _result.Success = false;
+                _result.Message = e.Message;
+            }
+            return _result;
         }
 
         public async Task<ResponseResult> ReadAll()
@@ -67,6 +97,13 @@ namespace AplikasiBarbershop.Repositories
                         Phone = o.Phone,
                         Role = o.Role,
                         Status = o.Status,
+                        CreateBy = o.CreateBy,
+                        CreateDate = o.CreateDate,
+                        DeletedBy = o.DeletedBy,
+                        DeletedDate = o.DeletedDate,
+                        IsDeleted = o.IsDeleted,
+                        ModifiedBy = o.ModifiedBy,
+                        ModifiedDate = o.ModifiedDate,
                     })
                     .ToList();
                 if (res == null)

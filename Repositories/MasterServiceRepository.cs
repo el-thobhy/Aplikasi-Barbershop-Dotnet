@@ -50,7 +50,36 @@ namespace AplikasiBarbershop.Repositories
 
         public async Task<ResponseResult> Delete(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                MasterServicesTable? data = await _dbContext.MasterServices
+                    .Where(o => o.Id == id)
+                    .FirstOrDefaultAsync();
+                data.IsDeleted = true;
+                data.DeletedBy = ClaimContext.UserName();
+                data.DeletedDate = DateTime.Now;
+
+                _dbContext.MasterServices.Update(data);
+                _dbContext.SaveChanges();
+
+
+                if (data.IsDeleted == true)
+                {
+                    _result.Success = true;
+                    _result.Message = $"Data {data.ServicesName} berhasil dihapus";
+                }
+                else
+                {
+                    _result.Success = false;
+                    _result.Message = "data Gagal dihapus";
+                }
+            }
+            catch (Exception e)
+            {
+                _result.Success = false;
+                _result.Message = e.Message;
+            }
+            return _result;
         }
 
         public async Task<ResponseResult> ReadAll()

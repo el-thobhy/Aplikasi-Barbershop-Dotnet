@@ -99,5 +99,19 @@ namespace AplikasiBarbershop.Controllers
                 return Ok(result);
             }
         }
+        [HttpDelete("Delete/{id}")]
+        [ReadableBodyStream(Roles = "ADMIN")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _repo.Delete(id);
+            if (result.Success)
+            {
+                string cacheKey = $"{CacheKey}_{id}";
+                _memoryCache.Remove(cacheKey);
+                _memoryCache.Remove(ListCacheKey);
+                _logger.LogInformation("Cache removed for key: {CacheKey}", cacheKey);
+            }
+            return result.Success ? Ok(result) : NotFound();
+        }
     }
 }
