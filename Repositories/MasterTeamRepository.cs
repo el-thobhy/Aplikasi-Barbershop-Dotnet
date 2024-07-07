@@ -170,7 +170,41 @@ namespace AplikasiBarbershop.Repositories
 
         public async Task<ResponseResult> Update(TeamViewModel model)
         {
-            throw new NotImplementedException();
+            try
+            {
+
+                MasterTeamTable? result = await _dbContext.MasterTeams
+                    .Where(o => o.Id == model.Id && o.IsDeleted == false)
+                    .FirstOrDefaultAsync();
+
+                if (result != null)
+                {
+                    result.Name = model.Name;
+                    result.Email = model.Email;
+                    result.Status = model.Status ?? 0;
+                    result.Phone = model.Phone;
+                    result.Role = model.Role ?? 0;
+                    result.CreateBy = result.CreateBy;
+                    result.CreateDate = result.CreateDate;
+                    result.ModifiedBy = ClaimContext.UserName();
+                    result.ModifiedDate = DateTime.Now;
+
+                    _dbContext.SaveChanges();
+
+                    ResponseResult respon = ReadById(result.Id).Result;
+                    _result.Success = true;
+                    _result.Data = respon.Data;
+                    _result.Message = "berhasil update data";
+                }
+
+            }
+            catch (Exception e)
+            {
+                _result.Success = false;
+                _result.Message = e.Message;
+            }
+
+            return _result;
         }
     }
 }

@@ -26,4 +26,8 @@ namespace AplikasiBarbershop.ViewModel
         public string? Email { get; set; } = default!;
         public Status? Status { get; set; } = default!;
     }
+    public class UpdateTeamViewModel: InputTeamViewModel
+    {
+        public int Id { get; set; }
+    }
 }

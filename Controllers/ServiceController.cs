@@ -99,6 +99,40 @@ namespace AplikasiBarbershop.Controllers
                 return Ok(result);
             }
         }
+
+        [HttpPut("Update")]
+        [ReadableBodyStream(Roles = "ADMIN")]
+        public async Task<IActionResult> Update(UpdateServiceViewModel model)
+        {
+            ServiceViewModel input = new ServiceViewModel()
+            {
+                Id = model.Id,
+                ServicesName = model.ServicesName,
+                Description = model.Description,
+                ImageUrl = model.ImageUrl,
+                Price = model.Price ?? 0,
+                ModifiedBy = ClaimContext.UserName(),
+                ModifiedDate = DateTime.Now
+            };
+            ValidationResult resultVal = await _validator.ValidateAsync(input);
+            if (!resultVal.IsValid)
+            {
+                return BadRequest(resultVal.Errors);
+            }
+            else
+            {
+                var result = await _repo.Update(input);
+                if (result.Success)
+                {
+                    string cacheKey = $"{CacheKey}_{input.Id}";
+                    _memoryCache.Remove(cacheKey);
+                    _memoryCache.Remove(ListCacheKey);
+                    _logger.LogInformation("Cache removed for key: {CacheKey}", cacheKey);
+                }
+                return Ok(result);
+            }
+        }
+
         [HttpDelete("Delete/{id}")]
         [ReadableBodyStream(Roles = "ADMIN")]
         public async Task<IActionResult> Delete(int id)

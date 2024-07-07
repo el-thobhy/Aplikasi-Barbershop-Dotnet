@@ -59,7 +59,6 @@ namespace AplikasiBarbershop.Repositories
                 data.DeletedBy = ClaimContext.UserName();
                 data.DeletedDate = DateTime.Now;
 
-                _dbContext.MasterServices.Update(data);
                 _dbContext.SaveChanges();
 
 
@@ -169,7 +168,40 @@ namespace AplikasiBarbershop.Repositories
 
         public async Task<ResponseResult> Update(ServiceViewModel model)
         {
-            throw new NotImplementedException();
+            try
+            {
+                
+                MasterServicesTable? result = await _dbContext.MasterServices
+                    .Where(o => o.Id == model.Id && o.IsDeleted == false)
+                    .FirstOrDefaultAsync();
+
+                if(result != null)
+                {
+                    result.ServicesName = model.ServicesName;
+                    result.Description = model.Description;
+                    result.ImageUrl = model.ImageUrl;
+                    result.Price = model.Price ?? 0;
+                    result.CreateBy = result.CreateBy;
+                    result.CreateDate = result.CreateDate;
+                    result.ModifiedBy = ClaimContext.UserName();
+                    result.ModifiedDate = DateTime.Now;
+
+                    _dbContext.SaveChanges();
+
+                    ResponseResult respon = ReadById(result.Id).Result;
+                    _result.Success = true;
+                    _result.Data = respon.Data;
+                    _result.Message = "berhasil update data";
+                }
+
+            }
+            catch (Exception e)
+            {
+                _result.Success = false;
+                _result.Message = e.Message;
+            }
+
+            return _result;
         }
     }
 }

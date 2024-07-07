@@ -19,6 +19,11 @@ namespace AplikasiBarbershop.ViewModel
         public string? ImageUrl { get; set; } = default!;
     }
 
+    public class UpdateServiceViewModel: CreateServiceViewModel
+    {
+        public int? Id { get; set; }
+    }
+
     public class GetServiceViewModel: ServiceViewModel
     {
         public int? UserId { get; set; } = default!;
