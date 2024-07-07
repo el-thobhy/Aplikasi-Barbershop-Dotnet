@@ -5,42 +5,43 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace AplikasiBarbershop.Repositories
 {
-    public class MasterBiodataRepository : InterfaceCrud<MasterBiodataTable>
+    public class MasterUserRepository : InterfaceCrud<MasterUserTable>
     {
         private readonly BarberDbContext _dbContext;
         private readonly ResponseResult _result = new ResponseResult();
-        public MasterBiodataRepository(BarberDbContext dbContext)
+        public MasterUserRepository(BarberDbContext dbContext)
         {
             _dbContext = dbContext;
 
         }
 
-        public MasterBiodataTable Create(MasterBiodataTable model)
+        public MasterUserTable Create(MasterUserTable model)
         {
             throw new NotImplementedException();
         }
 
-        public MasterBiodataTable Delete(int id)
+        public MasterUserTable Delete(int id)
         {
             throw new NotImplementedException();
         }
 
         public async Task<ResponseResult> ReadAll()
         {
-            List<GetBiodataViewModel> data = new List<GetBiodataViewModel>();
+            List<GetUserViewModel> data = new List<GetUserViewModel>();
             try
             {
-                data = await _dbContext.MasterBiodatas
+                data = await _dbContext.MasterUsers
                     .Include(o => o.Services)
                     .Include(o => o.Team)
                     .Where(o => o.IsDeleted == false)
-                    .Select(o => new GetBiodataViewModel
+                    .Select(o => new GetUserViewModel
                     {
                         Id = o.Id,
-                        Name = o.Name,
-                        Email = o.Email,
-                        Phone = o.Phone,
-                        Address = o.Address,
+                        Name = o.Biodata.Name,
+                        Email = o.Biodata.Email,
+                        Phone = o.Biodata.Phone,
+                        Address = o.Biodata.Address,
+                        UserName = o.UserName,
                         CreateBy = o.CreateBy,
                         CreateDate = o.CreateDate,
                         DeletedBy = o.DeletedBy,
@@ -89,19 +90,20 @@ namespace AplikasiBarbershop.Repositories
         {
             try
             {
-                GetBiodataViewModel? data = new GetBiodataViewModel();
-                data = await _dbContext.MasterBiodatas
+                GetUserViewModel? data = new GetUserViewModel();
+                data = await _dbContext.MasterUsers
                     .Include(o => o.Team)
                     .Include(o => o.Services)
                     .Where(o => o.Id == id && o.IsDeleted == false)
-                    .Select(o => new GetBiodataViewModel 
+                    .Select(o => new GetUserViewModel 
                     {
                         Id = o.Id,
-                        Name = o.Name,
-                        Email = o.Email,
-                        Phone = o.Phone,
-                        Address = o.Address,
+                        Name = o.Biodata.Name,
+                        Email = o.Biodata.Email,
+                        Phone = o.Biodata.Phone,
+                        Address = o.Biodata.Address,
                         CreateBy = o.CreateBy,
+                        UserName = o.UserName,
                         CreateDate = o.CreateDate,
                         DeletedBy = o.DeletedBy,
                         DeletedDate = o.DeletedDate,
@@ -145,7 +147,7 @@ namespace AplikasiBarbershop.Repositories
             return _result;
         }
 
-        public MasterBiodataTable Update(MasterBiodataTable model)
+        public MasterUserTable Update(MasterUserTable model)
         {
             throw new NotImplementedException();
         }

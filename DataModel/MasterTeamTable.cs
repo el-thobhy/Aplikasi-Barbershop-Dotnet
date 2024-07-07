@@ -10,10 +10,10 @@ namespace AplikasiBarbershop.DataModel
         public string Name { get; set; } = default!;
         public Role Role { get; set; } = default!;
         public string Phone { get; set; } = default!;
-        public int? BiodataId { get; set; } = default!;
+        public int? UserId { get; set; } = default!;
         public string Email { get; set; } = default!;
         public Status Status { get; set; } = default!;
-        public virtual MasterBiodataTable? Biodata { get; set; } = default!;
+        public virtual MasterUserTable? User { get; set; } = default!;
     }
 
     public class MasterTeamConfig : IEntityTypeConfiguration<MasterTeamTable>
@@ -26,7 +26,7 @@ namespace AplikasiBarbershop.DataModel
 
             builder.Property(x => x.Name).IsRequired().HasMaxLength(50);
             builder.Property(x => x.Role).IsRequired();
-            builder.Property(x => x.BiodataId).IsRequired(false);
+            builder.Property(x => x.UserId).IsRequired(false);
             builder.Property(x => x.Phone).IsRequired();
             builder.Property(x => x.Email).IsRequired().HasMaxLength(100);
             builder.Property(x => x.Status).IsRequired();
@@ -47,7 +47,7 @@ namespace AplikasiBarbershop.DataModel
                     Role = Role.HAIR_STYLIST_MEN,
                     Phone = "081278912302",
                     Email = "buid@gmail.com",
-                    BiodataId = 1,
+                    UserId = 2,
                     Status = Status.BUSY,
                     CreateBy = "admin",
                     CreateDate = DateTime.Now
@@ -58,9 +58,9 @@ namespace AplikasiBarbershop.DataModel
                     Name = "Asep",
                     Role = Role.HAIR_STYLIST_MEN,
                     Phone = "081123122302",
-                    BiodataId = 2,
+                    UserId = 3,
                     Email = "asep@gmail.com",
-                    Status = Status.AVAILABLE,
+                    Status = Status.BUSY,
                     CreateBy = "admin",
                     CreateDate = DateTime.Now
                 },
@@ -81,9 +81,9 @@ namespace AplikasiBarbershop.DataModel
                     Name = "Susi",
                     Role = Role.HAIR_CARE,
                     Phone = "0812789123112",
-                    BiodataId = 4,
+                    UserId = 4,
                     Email = "susi@gmail.com",
-                    Status = Status.AVAILABLE,
+                    Status = Status.BUSY,
                     CreateBy = "admin",
                     CreateDate = DateTime.Now
                 }

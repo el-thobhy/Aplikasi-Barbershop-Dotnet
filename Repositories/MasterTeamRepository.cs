@@ -28,29 +28,17 @@ namespace AplikasiBarbershop.Repositories
         {
             try
             {
-                List<GetTeamViewModel> res = new();
+                List<TeamViewModel> res = new();
                 res = _dbContext.MasterTeams
-                    .Include(o => o.Biodata)
                     .Where(o => o.IsDeleted == false)
-                    .Select(o => new GetTeamViewModel 
+                    .Select(o => new TeamViewModel 
                     { 
                         Id = o.Id,
-                        BiodataId = o.BiodataId,
                         Email = o.Email,
                         Name = o.Name,
                         Phone = o.Phone,
                         Role = o.Role,
                         Status = o.Status,
-                        Biodata = new BiodataViewModel
-                        {
-                            Id = o.Biodata.Id,
-                            Address = o.Biodata.Address,
-                            Email = o.Biodata.Email,
-                            Name = o.Biodata.Name,
-                            Phone = o.Biodata.Phone,
-                            CreateBy = o.Biodata.CreateBy,
-                            CreateDate = o.Biodata.CreateDate,
-                        }
                     })
                     .ToList();
                 if (res == null)
@@ -76,29 +64,18 @@ namespace AplikasiBarbershop.Repositories
         {
             try
             {
-                GetTeamViewModel? data = new GetTeamViewModel();
+                TeamViewModel? data = new TeamViewModel();
                 data = await _dbContext.MasterTeams
-                    .Include(o => o.Biodata)
+                    .Include(o => o.User)
                     .Where(o => o.Id == id && o.IsDeleted == false)
-                    .Select(o => new GetTeamViewModel
+                    .Select(o => new TeamViewModel
                     {
                         Id = o.Id,
-                        BiodataId = o.BiodataId,
                         Email = o.Email,
                         Name = o.Name,
                         Phone = o.Phone,
                         Role = o.Role,
                         Status = o.Status,
-                        Biodata = new BiodataViewModel
-                        {
-                            Id = o.Biodata.Id,
-                            Address = o.Biodata.Address,
-                            Email = o.Biodata.Email,
-                            Name = o.Biodata.Name,
-                            Phone = o.Biodata.Phone,
-                            CreateBy = o.Biodata.CreateBy,
-                            CreateDate = o.Biodata.CreateDate,
-                        }
                     }).FirstOrDefaultAsync();
                 if (data == null)
                 {

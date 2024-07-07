@@ -6,14 +6,12 @@ namespace AplikasiBarbershop.DataModel
 {
     public class MasterBiodataTable: BaseEntities
     {
-        public int Id { get; set; } = default!;
+        public int Id { get; set; }
         public string Name { get; set; } = default!;
         public string Phone { get; set; } = default!;
         public string Email { get; set; } = default!;
         public string Address { get; set; } = default!;
-
-        public virtual MasterTeamTable? Team { get; set; } = default!;
-        public virtual ICollection<MasterServicesTable>? Services { get; set; } = new List<MasterServicesTable>();
+        public virtual MasterUserTable? User { get; set; }
     }
     public class MasterBiodataConfig : IEntityTypeConfiguration<MasterBiodataTable>
     {
@@ -26,14 +24,12 @@ namespace AplikasiBarbershop.DataModel
             builder.Property(x => x.Name).IsRequired().HasMaxLength(50);
             builder.Property(x => x.Phone).IsRequired();
             builder.Property(x => x.Email).IsRequired();
-            builder.Property(x => x.Address).IsRequired().HasMaxLength(255);
+            builder.HasIndex(x => x.Email).IsUnique();
 
-            builder.HasMany(x => x.Services)
+            builder.Property(x => x.Address).IsRequired().HasMaxLength(255);
+            builder.HasOne(x => x.User)
                 .WithOne(x => x.Biodata)
-                .HasForeignKey(x => x.BiodataId);
-            builder.HasOne(x => x.Team)
-                .WithOne(x => x.Biodata)
-                .HasForeignKey<MasterTeamTable>(x => x.BiodataId);
+                .HasForeignKey<MasterUserTable>(x => x.BiodataId);
 
             builder.Seed();
         }

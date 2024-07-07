@@ -4,8 +4,8 @@ namespace AplikasiBarbershop.ViewModel
 {
     public class GetTeamViewModel: TeamViewModel
     {
-        public int? BiodataId { get; set; } = default!;
-        public virtual BiodataViewModel? Biodata { get; set; } = default!;
+        public int? UserId { get; set; } = default!;
+        public virtual UserViewModel? User { get; set; } = default!;
     }
     public class TeamViewModel
     {

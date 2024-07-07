@@ -28,30 +28,19 @@ namespace AplikasiBarbershop.Repositories
         {
             try
             {
-                List<GetServiceViewModel> data = new List<GetServiceViewModel>();
+                List<ServiceViewModel> data = new List<ServiceViewModel>();
                 data = await _dbContext.Set<MasterServicesTable>()
-                    .Include(o => o.Biodata)
+                    .Include(o => o.User)
                     .Where(o => o.IsDeleted == false)
-                    .Select(o => new GetServiceViewModel
+                    .Select(o => new ServiceViewModel
                     {
                         Id = o.Id,
                         ImageUrl = o.ImageUrl,
                         CreateBy = o.CreateBy,
                         CreateDate = o.CreateDate,
-                        Biodata = new BiodataViewModel
-                        {
-                            Id = o.Biodata.Id,
-                            Address = o.Biodata.Address,
-                            Email = o.Biodata.Email,
-                            Name = o.Biodata.Name,
-                            Phone = o.Biodata.Phone,
-                            CreateBy = o.Biodata.CreateBy,
-                            CreateDate = o.Biodata.CreateDate,
-                        },
                         Description = o.Description,
                         Price = o.Price,
                         ServicesName = o.ServicesName,
-                        BiodataId = o.Biodata.Id,
                         IsDeleted = o.IsDeleted,
                         DeletedBy = o.DeletedBy,
                         DeletedDate = o.DeletedDate,
@@ -82,30 +71,19 @@ namespace AplikasiBarbershop.Repositories
         {
              try
             {
-                GetServiceViewModel? data = new GetServiceViewModel();
+                ServiceViewModel? data = new ServiceViewModel();
                 data = await _dbContext.MasterServices
-                    .Include(o => o.Biodata)
+                    .Include(o => o.User)
                     .Where(o => o.Id == id && o.IsDeleted == false)
-                    .Select(o => new GetServiceViewModel 
+                    .Select(o => new ServiceViewModel 
                     {
                         Id = o.Id,
                         ImageUrl = o.ImageUrl,
                         CreateBy = o.CreateBy,
                         CreateDate = o.CreateDate,
-                        Biodata = new BiodataViewModel
-                        {
-                            Id = o.Biodata.Id,
-                            Address = o.Biodata.Address,
-                            Email = o.Biodata.Email,
-                            Name = o.Biodata.Name,
-                            Phone = o.Biodata.Phone,
-                            CreateBy = o.Biodata.CreateBy,
-                            CreateDate = o.Biodata.CreateDate,
-                        },
                         Description = o.Description,
                         Price = o.Price,
                         ServicesName = o.ServicesName,
-                        BiodataId = o.Biodata.Id,
                         IsDeleted = o.IsDeleted,
                         DeletedBy = o.DeletedBy,
                         DeletedDate = o.DeletedDate,
